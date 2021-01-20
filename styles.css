@@ -1,0 +1,11 @@
+.product__form_sticky {
+  background: white;
+  position: -webkit-sticky; /* Required for Safari */
+  position: sticky;
+  top: 54px;
+  z-index: 10;
+}
+
+.variant-selector__status-hidden {
+  display: none;
+}
