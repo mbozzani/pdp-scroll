@@ -9,3 +9,52 @@
 .variant-selector__status-hidden {
   display: none;
 }
+
+/*************** Progress progress-bar ****************/
+.progress-bar ul li {
+  display: inline-block;
+  width: 100px;
+  position: relative;
+}
+.progress-bar i {
+  color: #a19f9c;
+  padding: 5px;
+}
+.progress-bar ul li:nth-child(1) i::before {
+  border-radius: 5px 0 0 5px;
+}
+.progress-bar ul li:nth-child(1) i::after {
+  border-radius: 5px 0 0 5px;
+}
+.progress-bar ul li:nth-child(4) i::before {
+  border-radius: 0 5px 5px 0;
+}
+.progress-bar ul li:nth-child(4) i::after {
+  border-radius: 0 5px 5px 0;
+}
+.progress-bar i::before {
+  content: '';
+  height: 5px;
+  background: #ddad99;
+  position: absolute;
+  left: 0px;
+  bottom: 25px;
+  z-index: 2;
+}
+.progress-bar i::after {
+  content: '';
+  background: #f5e0d6;
+  height: 5px;
+  width: 100px;
+  position: absolute;
+  left: 0;
+  bottom: 25px;
+}
+
+.progress-bar .current::before {
+  background: #ddad99;
+  width: calc(var(--width, 0) * 1%);
+}
+.progress-bar .completed::after {
+  background: #ddad99;
+}
