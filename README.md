@@ -24,7 +24,7 @@ A lot of valuable content on the PDP lives below the add to bag button, which ca
 
 - Once the user clicks on the "Add to Bag" button, the flyout cart opens and displays the products in the cart. Implement a progress bar following the specs in Figma. Don't do any more changes in the cart beside the progress bar.
 
-The progress bar has to be filled according to this logic: 15 $ discount for 100 USD in the cart, 20 $ discount for 150 USD, 30 $ discount for 200 USD and, 50 $ discount for 300 USD. You can determine the current amount in the cart by accessing cartManager.getCart().totalPrice
+The progress bar has to be filled according to this logic: 15 $ discount for 100 USD in the cart, 20 $ discount for 150 USD, 30 $ discount for 200 USD and, 50 $ discount for 300 USD.
 
 ### Technical Requirements
 
@@ -32,7 +32,7 @@ To avoid any possible issue you should develop the challenge using vanilla js on
 
 ## Running the project
 
-```
-https://github.com/mbozzani/pdp-scroll
+- Install a code injection extension like [User Javascript and CSS to](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- Copy the src/scripts.js and src/styles.css files in the extension and load the PDP page in the browser
 
-```
+-
