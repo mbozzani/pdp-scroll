@@ -32,7 +32,7 @@ To avoid any possible issue you should develop the challenge using vanilla js on
 
 ## Running the project
 
-- Install a code injection extension like [User Javascript and CSS to](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- Install a code injection extension like [User Javascript and CSS](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld) the browser.
 - Copy the `src/scripts.js` and `src/styles.css` files in the extension and load the PDP page in the browser
 
 - Alternatively, you can run `yarn run build` to transpile ES6 code to ES5. Copy to the extension the generated javascript in `/dist/scripts_bundle.js`
