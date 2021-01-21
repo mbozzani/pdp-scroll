@@ -16,22 +16,30 @@
 	//
 	// Methods
 	//
+	/**
+	 * Watch for product recommendations and gallery sections
+	 * and enable/disable the 'sticky' feature
+	 * We use IntersectionObserver API instead of adding listeners for scroll events
+	 * which can cause performance issues
+	 */
 	const createIntersectionsObserver = () => {
-		let observer;
 		const options = {
 			threshold: 0.1
 		};
 	
-		observer = new IntersectionObserver(handleIntersections, options);
-		observer.observe(productRecommendations);
-		observer.observe(productGallery);
+		const observer = new IntersectionObserver(handleIntersections, options);
+		productRecommendations && observer.observe(productRecommendations);
+		productGallery && observer.observe(productGallery);
 	}
 
+	/**
+	 * Handler for IntersectionObserver
+	 * If productGallery or productRecommendations sections are visible in viewport
+		the 'sticky' feature is removed, otherwise is activated
+	 */
 	const handleIntersections = (entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
-				// if productGallery or productRecommendations are visible (in viewport)
-				// remove sticky feature
 				removeFormSticky();
 			} else {
 				makeFormSticky();
@@ -39,13 +47,17 @@
 		});
 	}
 
+	/**
+	 * Activate the 'sticky' functionality
+	 * Only if the viewport witdh is less than 1024 
+	 */
 	const makeFormSticky = () => {
 		const windowInnerWidth  = document.documentElement.clientWidth;
 		if (windowInnerWidth < 1024) {
 			if (!isStickyModeActive) {
+				productForm && productForm.classList.add('product__form_sticky');
+				variantSelector && variantSelector.classList.add('variant-selector__status-hidden');
 				isStickyModeActive = true;
-				productForm.classList.add('product__form_sticky');
-				variantSelector.classList.add('variant-selector__status-hidden');
 				removeSizeSwatches();
 			}
 		}
@@ -54,23 +66,34 @@
 	const removeFormSticky = () => {
 		if (isStickyModeActive) {
 			isStickyModeActive = false;
-			productForm.classList.remove('product__form_sticky');
-			variantSelector.classList.remove('variant-selector__status-hidden');
+			productForm && productForm.classList.remove('product__form_sticky');
+			variantSelector && variantSelector.classList.remove('variant-selector__status-hidden');
 			restoreSizeSwatches();
 		}
 	}
 
+	/**
+	 * Removes size swatches that are not multiple of 4
+	 * We iterate a static list returned by querySelectorAll when removing
+	 * This is a safe operation since the static list is not mutating while the options are being removed
+	 */
 	const removeSizeSwatches = () => {
 		const sizeSwatchesOptions = sizeSwatchesSelect.querySelectorAll('option');
-		sizeSwatchesOptions.forEach((option) => {
-			const value = parseInt(option.value.trim());
-			// If size swatch if not multiple of 4, remove it
-			if (!isNaN(value) && value%4 !== 0) {
-				option.remove();
-			}
-		});
+		if (sizeSwatchesOptions) {
+			sizeSwatchesOptions.forEach((option) => {
+				const value = parseInt(option.value.trim());
+				// If size swatch if not multiple of 4, remove it
+				if (!isNaN(value) && value%4 !== 0) {
+					option.remove();
+				}
+			});
+		}
 	}
 
+	/**
+	 * Restore the initial size swatches options and check the current selected item
+	 * to preserve the selection
+	 */
 	const restoreSizeSwatches = () => {
 		const selectedOption = sizeSwatchesSelect.selectedOptions.length && sizeSwatchesSelect.selectedOptions[0];
 		initialSizeSwatchesOptions.forEach(function(element,key) {
@@ -82,6 +105,9 @@
 		});
 	}
 
+	/**
+	 * Create the DOM elements of the progress bar and add them to the cart
+	 */
 	const addProgressBar = (parent, cartTotal) => {
 		const discounts = ['$15 off', '$20 off', '$30 off', '$50 off'];
 		const amounts = [100, 150, 200, 300];
@@ -122,6 +148,9 @@
 	//
 	// Inits & Event Listeners
 	//
+	/**
+	 * Wait until the page completes loading (shopify, etc) to init
+	 */
 	window.addEventListener('load', (event) => {
 		productGallery = document.querySelector('.product__gallery');
 		productRecommendations = document.querySelector('.product-recommendations');
@@ -131,7 +160,7 @@
 		initialSizeSwatchesOptions = sizeSwatchesSelect.querySelectorAll('option');
 
 		const cartButton = document.querySelector('.cart-count');
-		cartButton.addEventListener('click', handleCartButton);
+		cartButton && cartButton.addEventListener('click', handleCartButton);
 
 		const submitButtons = document.querySelectorAll('.variant-selector__submit');
 		submitButtons.forEach((button) => {
@@ -141,7 +170,15 @@
 		createIntersectionsObserver();
 	});
 
+	/**
+	 * Handle the cart/submit buttons click event
+	 * When the buttons are pressed we need to wait until flyout element is visible
+	 * before injecting the progress bar
+	 */
 	function handleCartButton(event){
+		// Utility method for executing a callback when an element is loaded to the DOM
+		// Needs a MAX_TRIES config to avoid setting the timeout indefinitely
+		// if the element is never loaded
 		const waitForEl = (selector, callback) => {
 			const el = document.querySelector(selector);
 			if (el) {
@@ -158,6 +195,5 @@
 			addProgressBar(el, cartTotal);
 		});
 	}
-
 
 })();
