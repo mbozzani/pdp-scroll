@@ -17,7 +17,9 @@
 
 /*************** Progress progress-bar ****************/
 .progress-bar {
-  width: 400px;
+  width: 85%;
+  padding: 1.2rem 0;
+  margin-left: 1rem;
 }
 .progress-bar ul {
   display: flex;
