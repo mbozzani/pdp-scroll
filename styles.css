@@ -18,8 +18,9 @@
 /*************** Progress progress-bar ****************/
 .progress-bar {
   width: 85%;
-  padding: 1.2rem 0;
+  margin-top: 1.875rem;
   margin-left: 1rem;
+  margin-bottom: 1rem;
 }
 .progress-bar ul {
   display: flex;
