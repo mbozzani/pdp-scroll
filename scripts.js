@@ -13,6 +13,7 @@
 	let initialSizeSwatchesOptions;
 	let sizeSwatchesSelect;
 
+	let cartButton;
 
 	//
 	// Methods
@@ -80,6 +81,43 @@
 		});
 	}
 
+	const addProgressBar = (parent, cartTotal) => {
+		const discounts = ['$15 off', '$20 off', '$30 off', '$50 off'];
+		const amounts = [100, 150, 200, 300];
+
+		const progressDiv = document.createElement('div');
+		progressDiv.classList.add('progress-bar');
+		const ul = document.createElement('ul');
+
+		for (var i = 0; i < discounts.length; i++) {
+			const li = document.createElement('li');
+			const span = document.createElement('span');
+			span.appendChild(document.createTextNode(discounts[i]));
+
+			if (cartTotal >= amounts[i]) {
+				span.classList.add('completed');
+
+			} else if (i===0 || (cartTotal<amounts[i] && cartTotal>=amounts[i-1])) {
+				span.classList.add('current');
+
+				let percentage = 0;
+				if (i===0) {
+					percentage = (cartTotal*100)/amounts[i];
+				} else {
+					percentage = ((cartTotal-amounts[i-1])*100)/(amounts[i]-amounts[i-1]);
+				}
+				span.style.setProperty('--width', percentage);
+			}
+
+			li.appendChild(span);
+			ul.appendChild(li);
+		}
+
+		progressDiv.appendChild(ul);
+		parent.appendChild(progressDiv);
+	}
+
+
 	//
 	// Inits & Event Listeners
 	//
@@ -90,8 +128,28 @@
 		variantSelector = document.querySelector('.variant-selector__status');
 		sizeSwatchesSelect = document.querySelector('.variant-selector__options select');
 		initialSizeSwatchesOptions = sizeSwatchesSelect.querySelectorAll('option');
-
+		cartButton = document.querySelector('.cart-count');
+		cartButton.addEventListener('click', handleCartButton);
 		createIntersectionsObserver();
 	});
+
+	function handleCartButton(event){
+		const waitForEl = (selector, callback) => {
+			const el = document.querySelector(selector);
+			if (el) {
+				callback(el);
+			} else {
+				setTimeout(function() {
+					waitForEl(selector, callback);
+				}, 100);
+			}
+		};
+
+		waitForEl('.cart__banner', function(el) {
+			const cartTotal = cartManager.getCart().totalPrice;
+			addProgressBar(el, cartTotal);
+		});
+	}
+
 
 })();
