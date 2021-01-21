@@ -13,8 +13,6 @@
 	let initialSizeSwatchesOptions;
 	let sizeSwatchesSelect;
 
-	let cartButton;
-
 	//
 	// Methods
 	//
@@ -131,8 +129,15 @@
 		variantSelector = document.querySelector('.variant-selector__status');
 		sizeSwatchesSelect = document.querySelector('.variant-selector__options select');
 		initialSizeSwatchesOptions = sizeSwatchesSelect.querySelectorAll('option');
-		cartButton = document.querySelector('.cart-count');
+
+		const cartButton = document.querySelector('.cart-count');
 		cartButton.addEventListener('click', handleCartButton);
+
+		const submitButtons = document.querySelectorAll('.variant-selector__submit');
+		submitButtons.forEach((button) => {
+			button.addEventListener('click', handleCartButton);
+		})
+
 		createIntersectionsObserver();
 	});
 
