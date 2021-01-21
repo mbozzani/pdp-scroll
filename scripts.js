@@ -10,8 +10,8 @@
 	let productRecommendations;
 	let isStickyModeActive = false;
 
-	let selectSizeSwatches;
-	let initialSizeSwatchesOptions = [];
+	let initialSizeSwatchesOptions;
+	let sizeSwatchesSelect;
 
 
 	//
@@ -54,14 +54,28 @@
 			isStickyModeActive = false;
 			productForm.classList.remove('product__form_sticky');
 			variantSelector.classList.remove('variant-selector__status-hidden');
+			restoreSizeSwatches();
 		}
 	}
 
 	const removeSizeSwatches = () => {
-		selectSizeSwatches.options.forEach((option) => {
+		const sizeSwatchesOptions = sizeSwatchesSelect.querySelectorAll('option');
+		sizeSwatchesOptions.forEach((option) => {
 			const value = parseInt(option.value.trim());
+			// If size swatch if not multiple of 4, remove it
 			if (!isNaN(value) && value%4 !== 0) {
 				option.remove();
+			}
+		});
+	}
+
+	const restoreSizeSwatches = () => {
+		const selectedOption = sizeSwatchesSelect.selectedOptions.length && sizeSwatchesSelect.selectedOptions[0];
+		initialSizeSwatchesOptions.forEach(function(element,key) {
+			if (element.text!=='Select') {
+				const isSelected = element.value == selectedOption.value ? true:false;
+				const option = new Option(element.text, element.value, element.defaultSelected, isSelected);
+				sizeSwatchesSelect[key] = option;
 			}
 		});
 	}
@@ -74,9 +88,8 @@
 		productRecommendations = document.querySelector('.product-recommendations');
 		productForm = document.querySelector('.product__form');
 		variantSelector = document.querySelector('.variant-selector__status');
-		
-		selectSizeSwatches = document.querySelector('.variant-selector__options select');
-		initialSizeSwatchesOptions = selectSizeSwatches.options;
+		sizeSwatchesSelect = document.querySelector('.variant-selector__options select');
+		initialSizeSwatchesOptions = sizeSwatchesSelect.querySelectorAll('option');
 
 		createIntersectionsObserver();
 	});
