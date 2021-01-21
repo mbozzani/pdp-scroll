@@ -10,46 +10,58 @@
   display: none;
 }
 
-/*************** Progress progress-bar ****************/
-.progress-bar ul li {
-  display: inline-block;
-  width: 100px;
-  position: relative;
+.cart__banner {
+  background: none;
+  border-bottom: 0.0625rem solid #ddd;
 }
-.progress-bar i {
+
+/*************** Progress progress-bar ****************/
+.progress-bar {
+  width: 400px;
+}
+.progress-bar ul {
+  display: flex;
+}
+.progress-bar ul li {
+  display: block;
+  position: relative;
+  flex: 1;
+  list-style: none;
+  width: auto;
+  margin-left: 2px;
+  text-align: right;
+}
+.progress-bar span {
   font-size: 0.875rem;
   font-weight: 300;
   color: #a19f9c;
-  padding: 5px;
 }
-.progress-bar ul li:nth-child(1) i::before {
+.progress-bar ul li:first-child span::before,
+.progress-bar ul li:first-child span::after {
   border-radius: 5px 0 0 5px;
 }
-.progress-bar ul li:nth-child(1) i::after {
-  border-radius: 5px 0 0 5px;
-}
-.progress-bar ul li:nth-child(4) i::before {
+.progress-bar ul li:last-child span::before,
+.progress-bar ul li:last-child span::after {
   border-radius: 0 5px 5px 0;
 }
-.progress-bar ul li:nth-child(4) i::after {
-  border-radius: 0 5px 5px 0;
-}
-.progress-bar i::before {
+.progress-bar span::before {
+  display: block;
   content: '';
   height: 5px;
   background: #ddad99;
   position: absolute;
-  left: -75px;
+  left: -25%;
   bottom: 25px;
-  z-index: 2;
+  z-index: 99;
 }
-.progress-bar i::after {
+.progress-bar span::after {
+  display: block;
   content: '';
   background: #f5e0d6;
   height: 5px;
-  width: 100px;
+  width: 100%;
   position: absolute;
-  left: -75px;
+  right: 25%;
   bottom: 25px;
 }
 
