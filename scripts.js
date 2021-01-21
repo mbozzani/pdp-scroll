@@ -42,11 +42,14 @@
 	}
 
 	const makeFormSticky = () => {
-		if (!isStickyModeActive) {
-			isStickyModeActive = true;
-			productForm.classList.add('product__form_sticky');
-			variantSelector.classList.add('variant-selector__status-hidden');
-			removeSizeSwatches();
+		const windowInnerWidth  = document.documentElement.clientWidth;
+		if (windowInnerWidth < 1024) {
+			if (!isStickyModeActive) {
+				isStickyModeActive = true;
+				productForm.classList.add('product__form_sticky');
+				variantSelector.classList.add('variant-selector__status-hidden');
+				removeSizeSwatches();
+			}
 		}
 	}
 	
