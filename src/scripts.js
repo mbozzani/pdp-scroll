@@ -206,14 +206,19 @@
 		// Utility method for executing a callback when an element is loaded to the DOM
 		// Needs a MAX_TRIES config to avoid setting the timeout indefinitely
 		// if the element is never loaded
+		const MAX_TRIES = 10;
+		let counter = 0;
 		const waitForEl = (selector, callback) => {
 			const el = document.querySelector(selector);
 			if (el) {
 				callback(el);
 			} else {
-				setTimeout(function() {
-					waitForEl(selector, callback);
-				}, 100);
+				if (counter <= MAX_TRIES) {
+					counter++;
+					setTimeout(function() {
+						waitForEl(selector, callback);
+					}, 200);
+				}
 			}
 		};
 
