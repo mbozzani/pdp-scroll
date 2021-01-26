@@ -13,6 +13,8 @@
 	let initialSizeSwatchesOptions;
 	let sizeSwatchesSelect;
 
+	let progressBar;
+
 	//
 	// Methods
 	//
@@ -110,23 +112,38 @@
 	 */
 	const addProgressBar = (parent, cartTotal) => {
 		const discounts = ['$15 off', '$20 off', '$30 off', '$50 off'];
-		const amounts = [100, 150, 200, 300];
-
-		const progressDiv = document.createElement('div');
+		progressDiv = document.createElement('div');
 		progressDiv.classList.add('progress-bar');
 		const ul = document.createElement('ul');
 
-		for (var i = 0; i < discounts.length; i++) {
+		discounts.forEach((discount) => {
 			const li = document.createElement('li');
 			const span = document.createElement('span');
-			span.appendChild(document.createTextNode(discounts[i]));
+			li.appendChild(span);
+			span.appendChild(document.createTextNode(discount));
+			ul.append(li);
+		});
+		progressDiv.appendChild(ul);
+		parent.appendChild(progressDiv);
+		setProgressBarPercentage(cartTotal);
+	}
+
+	/**
+	 * Calculate and set the progress bar percentage
+	 */
+	const setProgressBarPercentage = (cartTotal) => {
+		const amounts = [100, 150, 200, 300];
+		const liItems = progressDiv.firstElementChild.children;
+
+		for (let i = 0; i < liItems.length; i++) {
+			const span = liItems[i].firstElementChild;
+			span.classList.remove('completed', 'current');
+			span.style.removeProperty('--width');
 
 			if (cartTotal >= amounts[i]) {
 				span.classList.add('completed');
-
 			} else if (i===0 || (cartTotal<amounts[i] && cartTotal>=amounts[i-1])) {
 				span.classList.add('current');
-
 				let percentage = 0;
 				if (i===0) {
 					percentage = (cartTotal*100)/amounts[i];
@@ -135,13 +152,23 @@
 				}
 				span.style.setProperty('--width', percentage);
 			}
-
-			li.appendChild(span);
-			ul.appendChild(li);
 		}
+	}
 
-		progressDiv.appendChild(ul);
-		parent.appendChild(progressDiv);
+	/**
+	 * Watch changes in the cart main section.
+	 * If list items are deleted or cart total amount changes the observer
+	 * will catch the change and set the new value in the progress bar
+	 * I've decided to use an observer since all operations in the cart are async
+	 * A better solution would be to listen for cartManager events
+	 */
+	const watchCartMain = () => {
+		const mutationOptions = { childList: true, subtree: true, characterData: true};
+		const cartMainObserver = new MutationObserver(function (mutationList) {
+			setProgressBarPercentage(cartManager.getCart().totalPrice)
+		});
+		const cartMain = document.querySelector('.cart__main');
+		cartMain && cartMainObserver.observe(cartMain, mutationOptions);
 	}
 
 
@@ -191,8 +218,8 @@
 		};
 
 		waitForEl('.cart__banner', function(el) {
-			const cartTotal = cartManager.getCart().totalPrice;
-			addProgressBar(el, cartTotal);
+			addProgressBar(el, cartManager.getCart().totalPrice);
+			watchCartMain();
 		});
 	}
 
